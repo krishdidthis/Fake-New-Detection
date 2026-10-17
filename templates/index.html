@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Fake News Detector</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        /* =========================
+           VIDEO INPUT
+        ========================= */
+
+        #videoUrl {
+
+            width: 100%;
+
+            padding: 16px;
+
+            border: 2px solid #e5e8ef;
+
+            border-radius: 12px;
+
+            font-size: 15px;
+
+            font-family: inherit;
+
+            outline: none;
+
+            transition: 0.2s;
+
+        }
+
+        #videoUrl:focus {
+
+            border-color: #5b5ff7;
+
+            box-shadow:
+                0 0 0 3px rgba(91, 95, 247, 0.08);
+
+        }
+
+
+        /* =========================
+           VIDEO RESULT
+        ========================= */
+
+        .video-result {
+
+            display: none;
+
+            align-items: flex-start;
+
+        }
+
+        .video-result.show {
+
+            display: flex;
+
+        }
+
+
+        .video-transcript {
+
+            margin-top: 18px;
+
+            padding: 15px;
+
+            background: #f7f8fc;
+
+            border-radius: 10px;
+
+            max-height: 180px;
+
+            overflow-y: auto;
+
+        }
+
+        .video-transcript strong {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 13px;
+
+            color: #555d70;
+
+        }
+
+        .video-transcript p {
+
+            color: #687386;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+            margin: 0;
+
+        }
+
+
+        /* REAL */
+
+        .video-result.real {
+
+            border-color: #a5d6a7;
+
+        }
+
+        .video-result.real .result-icon {
+
+            background: #e8f5e9;
+
+            color: #2e7d32;
+
+        }
+
+        .video-result.real .result-content h2,
+
+        .video-result.real .confidence strong {
+
+            color: #2e7d32;
+
+        }
+
+
+        /* FAKE */
+
+        .video-result.fake {
+
+            border-color: #ef9a9a;
+
+        }
+
+        .video-result.fake .result-icon {
+
+            background: #ffebee;
+
+            color: #c62828;
+
+        }
+
+        .video-result.fake .result-content h2,
+
+        .video-result.fake .confidence strong {
+
+            color: #c62828;
+
+        }
+
+
+        /* VIDEO LOADING */
+
+        .video-result.loading {
+
+            border-color: #ffe3a3;
+
+        }
+
+        .video-result.loading .result-icon {
+
+            background: #fff4d6;
+
+            color: #d88a00;
+
+        }
+
+        .video-result.loading .result-content h2,
+
+        .video-result.loading .confidence strong {
+
+            color: #d88a00;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NAVIGATION
+    ========================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+
+            🛡️ Fake<span>News</span>
+
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="#">Home</a>
+
+            <a href="#about">About</a>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================= -->
+
+    <main class="container">
+
+
+        <!-- =========================
+             HERO
+        ========================= -->
+
+        <section class="hero">
+
+            <div class="badge">
+
+                ✨ AI Powered
+
+            </div>
+
+
+            <h1>
+
+                Detect Fake News
+
+                <br>
+
+                <span>
+                    Before You Believe It.
+                </span>
+
+            </h1>
+
+
+            <p>
+
+                An AI-powered system designed to analyze news
+                and help identify potentially misleading information.
+
+            </p>
+
+        </section>
+
+
+
+        <!-- =========================
+             TEXT NEWS DETECTOR
+        ========================= -->
+
+        <section class="detector-card">
+
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        Check Your News
+                    </h2>
+
+
+                    <p>
+
+                        Paste a headline or news article below.
+
+                    </p>
+
+                </div>
+
+
+                <div class="ai-icon">
+
+                    🤖
+
+                </div>
+
+            </div>
+
+
+
+            <textarea
+                id="newsText"
+                placeholder="Paste your news article or headline here..."
+            ></textarea>
+
+
+
+            <div class="bottom-section">
+
+
+                <span id="characterCount">
+
+                    0 characters
+
+                </span>
+
+
+                <button onclick="checkNews()">
+
+                    Check News
+
+                    <span>→</span>
+
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             VIDEO DETECTOR
+        ========================= -->
+
+        <section class="detector-card video-detector">
+
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        Check a Video
+                    </h2>
+
+
+                    <p>
+
+                        Paste a YouTube video link
+                        to analyze its spoken content.
+
+                    </p>
+
+                </div>
+
+
+                <div class="ai-icon">
+
+                    🎥
+
+                </div>
+
+            </div>
+
+
+
+            <input
+                type="text"
+                id="videoUrl"
+                placeholder="Paste YouTube video URL here..."
+            >
+
+
+
+            <div class="bottom-section">
+
+
+                <span id="videoStatus">
+
+                    YouTube Video
+
+                </span>
+
+
+                <button onclick="checkVideo()">
+
+                    Check Video
+
+                    <span>→</span>
+
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             TEXT RESULT
+        ========================= -->
+
+        <section id="result"
+                 class="result-card">
+
+
+            <div class="result-icon"
+                 id="resultIcon">
+
+                ⏳
+
+            </div>
+
+
+
+            <div class="result-content">
+
+
+                <p class="result-label">
+
+                    RESULT
+
+                </p>
+
+
+                <h2 id="resultTitle">
+
+                    CHECKING...
+
+                </h2>
+
+
+                <p id="resultText">
+
+                    Enter some news to get an AI prediction.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="confidence">
+
+
+                <span>
+
+                    Confidence
+
+                </span>
+
+
+                <strong id="confidenceValue">
+
+                    -
+
+                </strong>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             VIDEO RESULT
+        ========================= -->
+
+        <section id="videoResult"
+                 class="result-card video-result">
+
+
+            <div class="result-icon"
+                 id="videoResultIcon">
+
+                ⏳
+
+            </div>
+
+
+
+            <div class="result-content">
+
+
+                <p class="result-label">
+
+                    VIDEO ANALYSIS
+
+                </p>
+
+
+                <h2 id="videoResultTitle">
+
+                    ANALYZING...
+
+                </h2>
+
+
+                <p id="videoResultText">
+
+                    Please wait while the video is being analyzed.
+
+                </p>
+
+
+
+                <div class="video-transcript">
+
+
+                    <strong>
+
+                        Transcript
+
+                    </strong>
+
+
+                    <p id="videoTranscript">
+
+                        Waiting for transcript...
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="confidence">
+
+
+                <span>
+
+                    Confidence
+
+                </span>
+
+
+                <strong id="videoConfidence">
+
+                    ...
+
+                </strong>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             INFORMATION
+        ========================= -->
+
+        <section id="about"
+                 class="info-section">
+
+
+            <div class="info-box">
+
+
+                <div>
+
+                    🧠
+
+                </div>
+
+
+                <h3>
+
+                    AI Analysis
+
+                </h3>
+
+
+                <p>
+
+                    Machine learning analyzes news text
+                    and identifies patterns associated
+                    with fake news.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="info-box">
+
+
+                <div>
+
+                    ⚡
+
+                </div>
+
+
+                <h3>
+
+                    Fast Results
+
+                </h3>
+
+
+                <p>
+
+                    The AI model provides predictions
+                    within seconds.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="info-box">
+
+
+                <div>
+
+                    🔒
+
+                </div>
+
+
+                <h3>
+
+                    Simple & Private
+
+                </h3>
+
+
+                <p>
+
+                    News content is processed by the
+                    application for analysis.
+
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer>
+
+        <p>
+
+            Fake News Detector •
+            AI & Machine Learning Project
+
+        </p>
+
+    </footer>
+
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+
+        /* =========================
+           CHARACTER COUNTER
+        ========================= */
+
+        const newsText =
+            document.getElementById("newsText");
+
+        const characterCount =
+            document.getElementById("characterCount");
+
+
+        newsText.addEventListener(
+            "input",
+            function () {
+
+                characterCount.textContent =
+                    this.value.length +
+                    " characters";
+
+            }
+        );
+
+
+
+        /* =========================
+           TEXT NEWS CHECKER
+        ========================= */
+
+        async function checkNews() {
+
+
+            const text =
+                document.getElementById(
+                    "newsText"
+                ).value.trim();
+
+
+            if (text === "") {
+
+                alert(
+                    "Please enter some news first."
+                );
+
+                return;
+
+            }
+
+
+            const result =
+                document.getElementById(
+                    "result"
+                );
+
+
+            result.classList.remove(
+                "real",
+                "fake"
+            );
+
+
+            result.classList.add(
+                "show"
+            );
+
+
+            document.getElementById(
+                "resultTitle"
+            ).textContent =
+                "CHECKING...";
+
+
+            document.getElementById(
+                "resultText"
+            ).textContent =
+                "Analyzing your news, please wait.";
+
+
+            document.getElementById(
+                "confidenceValue"
+            ).textContent =
+                "...";
+
+
+            document.getElementById(
+                "resultIcon"
+            ).textContent =
+                "⏳";
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+                        "/predict",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    news: text
+                                })
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Prediction failed."
+                    );
+
+                }
+
+
+                const isReal =
+                    data.label === "REAL";
+
+
+                document.getElementById(
+                    "resultTitle"
+                ).textContent =
+                    isReal
+                        ? "LOOKS REAL"
+                        : "LOOKS FAKE";
+
+
+                document.getElementById(
+                    "resultText"
+                ).textContent =
+                    isReal
+                        ? "The AI model found this text similar to real news articles."
+                        : "The AI model found this text similar to fake news articles.";
+
+
+                document.getElementById(
+                    "confidenceValue"
+                ).textContent =
+                    data.confidence + "%";
+
+
+                document.getElementById(
+                    "resultIcon"
+                ).textContent =
+                    isReal
+                        ? "✅"
+                        : "⚠️";
+
+
+                result.classList.add(
+                    isReal
+                        ? "real"
+                        : "fake"
+                );
+
+
+                result.scrollIntoView({
+                    behavior: "smooth"
+                });
+
+
+            }
+
+
+            catch (error) {
+
+
+                document.getElementById(
+                    "resultTitle"
+                ).textContent =
+                    "ERROR";
+
+
+                document.getElementById(
+                    "resultText"
+                ).textContent =
+                    error.message;
+
+
+                document.getElementById(
+                    "confidenceValue"
+                ).textContent =
+                    "-";
+
+
+                document.getElementById(
+                    "resultIcon"
+                ).textContent =
+                    "❌";
+
+            }
+
+        }
+
+
+
+        /* =========================
+           VIDEO CHECKER
+        ========================= */
+
+        async function checkVideo() {
+
+
+            const videoUrl =
+                document.getElementById(
+                    "videoUrl"
+                ).value.trim();
+
+
+            const videoResult =
+                document.getElementById(
+                    "videoResult"
+                );
+
+
+            const videoStatus =
+                document.getElementById(
+                    "videoStatus"
+                );
+
+
+            if (videoUrl === "") {
+
+                alert(
+                    "Please enter a YouTube video URL."
+                );
+
+                return;
+
+            }
+
+
+            /* Show result card */
+
+            videoResult.classList.remove(
+                "real",
+                "fake"
+            );
+
+
+            videoResult.classList.add(
+                "show",
+                "loading"
+            );
+
+
+            /* Loading state */
+
+            document.getElementById(
+                "videoResultIcon"
+            ).textContent =
+                "⏳";
+
+
+            document.getElementById(
+                "videoResultTitle"
+            ).textContent =
+                "ANALYZING...";
+
+
+            document.getElementById(
+                "videoResultText"
+            ).textContent =
+                "Downloading audio and analyzing the video. Please wait.";
+
+
+            document.getElementById(
+                "videoConfidence"
+            ).textContent =
+                "...";
+
+
+            document.getElementById(
+                "videoTranscript"
+            ).textContent =
+                "Whisper is converting speech to text...";
+
+
+            videoStatus.textContent =
+                "Analyzing video...";
+
+
+            /* Scroll to result */
+
+            videoResult.scrollIntoView({
+                behavior: "smooth"
+            });
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+                        "/predict_video",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    video_url:
+                                        videoUrl
+                                })
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Video analysis failed."
+                    );
+
+                }
+
+
+                const isReal =
+                    data.label === "REAL";
+
+
+                /* Remove loading */
+
+                videoResult.classList.remove(
+                    "loading"
+                );
+
+
+                /* Title */
+
+                document.getElementById(
+                    "videoResultTitle"
+                ).textContent =
+                    isReal
+                        ? "LOOKS REAL"
+                        : "LOOKS FAKE";
+
+
+                /* Description */
+
+                document.getElementById(
+                    "videoResultText"
+                ).textContent =
+                    isReal
+                        ? "The AI model found the spoken content similar to real news articles."
+                        : "The AI model found the spoken content similar to fake news articles.";
+
+
+                /* Confidence */
+
+                document.getElementById(
+                    "videoConfidence"
+                ).textContent =
+                    data.confidence + "%";
+
+
+                /* Icon */
+
+                document.getElementById(
+                    "videoResultIcon"
+                ).textContent =
+                    isReal
+                        ? "✅"
+                        : "⚠️";
+
+
+                /* Transcript */
+
+                document.getElementById(
+                    "videoTranscript"
+                ).textContent =
+                    data.transcript;
+
+
+                /* Result color */
+
+                videoResult.classList.add(
+                    isReal
+                        ? "real"
+                        : "fake"
+                );
+
+
+                videoStatus.textContent =
+                    "Analysis complete";
+
+
+                /* Scroll */
+
+                videoResult.scrollIntoView({
+                    behavior: "smooth"
+                });
+
+
+            }
+
+
+            catch (error) {
+
+
+                videoResult.classList.remove(
+                    "loading",
+                    "real",
+                    "fake"
+                );
+
+
+                document.getElementById(
+                    "videoResultIcon"
+                ).textContent =
+                    "❌";
+
+
+                document.getElementById(
+                    "videoResultTitle"
+                ).textContent =
+                    "ERROR";
+
+
+                document.getElementById(
+                    "videoResultText"
+                ).textContent =
+                    error.message;
+
+
+                document.getElementById(
+                    "videoConfidence"
+                ).textContent =
+                    "-";
+
+
+                document.getElementById(
+                    "videoTranscript"
+                ).textContent =
+                    "Transcript unavailable.";
+
+
+                videoStatus.textContent =
+                    "Analysis failed";
+
+            }
+
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,646 @@
+
+/* =========================
+   RESET
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #f5f7fb;
+
+    color: #172033;
+
+    min-height: 100vh;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+
+    height: 70px;
+
+    background: white;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 0 8%;
+
+    border-bottom: 1px solid #e8ebf2;
+}
+
+
+/* Logo */
+
+.logo {
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    color: #172033;
+}
+
+
+.logo span {
+
+    color: #5b5ff7;
+}
+
+
+/* Navigation Links */
+
+.nav-links {
+
+    display: flex;
+
+    gap: 30px;
+}
+
+
+.nav-links a {
+
+    text-decoration: none;
+
+    color: #555d70;
+
+    font-size: 15px;
+
+    transition: 0.2s;
+}
+
+
+.nav-links a:hover {
+
+    color: #5b5ff7;
+}
+
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.container {
+
+    max-width: 1000px;
+
+    margin: auto;
+
+    padding: 70px 25px;
+}
+
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero {
+
+    text-align: center;
+
+    margin-bottom: 45px;
+}
+
+
+/* AI Badge */
+
+.badge {
+
+    display: inline-block;
+
+    background: #ececff;
+
+    color: #5558e8;
+
+    padding: 8px 16px;
+
+    border-radius: 30px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    margin-bottom: 20px;
+}
+
+
+/* Heading */
+
+.hero h1 {
+
+    font-size: 48px;
+
+    line-height: 1.15;
+
+    margin-bottom: 20px;
+}
+
+
+.hero h1 span {
+
+    color: #5b5ff7;
+}
+
+
+/* Description */
+
+.hero p {
+
+    max-width: 650px;
+
+    margin: auto;
+
+    color: #697386;
+
+    font-size: 17px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   DETECTOR CARD
+========================= */
+
+.detector-card {
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 35px rgba(20, 30, 60, 0.08);
+}
+
+
+/* Header */
+
+.card-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 22px;
+}
+
+
+.card-header h2 {
+
+    font-size: 22px;
+
+    margin-bottom: 6px;
+}
+
+
+.card-header p {
+
+    color: #7b8495;
+
+    font-size: 14px;
+}
+
+
+/* AI Icon */
+
+.ai-icon {
+
+    width: 50px;
+
+    height: 50px;
+
+    background: #f0f0ff;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 24px;
+}
+
+
+/* =========================
+   TEXTAREA
+========================= */
+
+textarea {
+
+    width: 100%;
+
+    height: 220px;
+
+    resize: vertical;
+
+    border: 2px solid #e5e8ef;
+
+    border-radius: 12px;
+
+    padding: 18px;
+
+    font-size: 15px;
+
+    font-family: inherit;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+
+textarea:focus {
+
+    border-color: #5b5ff7;
+
+    box-shadow:
+        0 0 0 3px rgba(91, 95, 247, 0.08);
+}
+
+
+/* =========================
+   BOTTOM SECTION
+========================= */
+
+.bottom-section {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-top: 15px;
+}
+
+
+#characterCount {
+
+    color: #8991a1;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+button {
+
+    border: none;
+
+    background: #5b5ff7;
+
+    color: white;
+
+    padding: 13px 23px;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+button:hover {
+
+    background: #4549dc;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 15px rgba(91, 95, 247, 0.25);
+}
+
+
+button span {
+
+    margin-left: 8px;
+}
+
+
+/* =========================
+   RESULT CARD
+========================= */
+
+.result-card {
+
+    display: none;
+
+    background: white;
+
+    margin-top: 25px;
+
+    padding: 25px;
+
+    border-radius: 16px;
+
+    align-items: center;
+
+    gap: 20px;
+
+    box-shadow:
+        0 8px 25px rgba(20, 30, 60, 0.06);
+
+    border: 1px solid #ffe3a3;
+}
+
+
+/* Show result */
+
+.result-card.show {
+
+    display: flex;
+}
+
+
+/* Result Icon */
+
+.result-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    min-width: 55px;
+
+    border-radius: 50%;
+
+    background: #fff4d6;
+
+    color: #d88a00;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 25px;
+}
+
+
+/* Result Content */
+
+.result-content {
+
+    flex: 1;
+}
+
+
+.result-label {
+
+    font-size: 11px;
+
+    color: #8991a1;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 5px;
+}
+
+
+.result-content h2 {
+
+    font-size: 21px;
+
+    color: #d88a00;
+
+    margin-bottom: 7px;
+}
+
+
+.result-content p:last-child {
+
+    color: #687386;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* Confidence */
+
+.confidence {
+
+    text-align: right;
+}
+
+
+.confidence span {
+
+    display: block;
+
+    font-size: 12px;
+
+    color: #8991a1;
+
+    margin-bottom: 4px;
+}
+
+
+.confidence strong {
+
+    font-size: 18px;
+
+    color: #d88a00;
+}
+
+
+/* =========================
+   INFORMATION SECTION
+========================= */
+
+.info-section {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin-top: 40px;
+}
+
+
+.info-box {
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 14px;
+
+    text-align: center;
+
+    transition: 0.2s;
+}
+
+
+.info-box:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 8px 25px rgba(20, 30, 60, 0.07);
+}
+
+
+.info-box div {
+
+    font-size: 28px;
+
+    margin-bottom: 12px;
+}
+
+
+.info-box h3 {
+
+    font-size: 16px;
+
+    margin-bottom: 8px;
+}
+
+
+.info-box p {
+
+    color: #778094;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+
+    text-align: center;
+
+    padding: 25px;
+
+    color: #8a92a2;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+
+
+    /* Hero */
+
+    .hero h1 {
+
+        font-size: 36px;
+    }
+
+
+    .hero p {
+
+        font-size: 15px;
+    }
+
+
+    /* Info */
+
+    .info-section {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    /* Result */
+
+    .result-card {
+
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+
+    .confidence {
+
+        text-align: center;
+    }
+
+
+    /* Navbar */
+
+    .navbar {
+
+        padding: 0 20px;
+    }
+
+
+    .nav-links {
+
+        gap: 15px;
+    }
+
+
+    /* Container */
+
+    .container {
+
+        padding: 45px 15px;
+    }
+
+
+    /* Detector */
+
+    .detector-card {
+
+        padding: 20px;
+    }
+
+
+    /* Button */
+
+    .bottom-section {
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+}
